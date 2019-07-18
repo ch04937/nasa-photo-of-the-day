@@ -1,15 +1,21 @@
 import React, {useState, useEffect} from "react";
-import ReactDom from 'react-dom'
-
-import NasaGrid from '../src/components/NasaGrid'
+import axios from 'axios'
+import PhotoCard from './components/PhotoCard'
+import Header from './components/Header'
 
 import "./App.css";
 
-function App() {
-  const [count, setCount] = useState(0);
-  useEffect(() => {
 
-  })
+function App() {
+  const [data, setData] = useState(null);
+  useEffect(() => {
+    axios.get(
+      "https:api.nasa.gov/planetary/apod?api_key=cvQfsM1Yd2opQ3UAQEufPMMPRinnTReNGgUeirlt&date=2019-04-27"
+    )
+    .then(res => {
+      setData(res.data)
+    });
+  }, []);
   return (
     <div className="App">
       <p>
@@ -17,13 +23,13 @@ function App() {
         app! Have fun 🚀!
 
       </p>
-      <NasaGrid limit ={10}  />
-      {/*
-      <NasaGrid limit = {10} column = {3}/>
-        <NasaCards>
-          <img>
-            <a href =''>
-      */}
+      {data
+     ? <PhotoCard title={data.title}
+                  url={data.url}
+                  explanation={data.explanation}
+                  date={data.date} />
+       : <div>Loading</div>}
+  
 
     </div>
   );
